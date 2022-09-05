@@ -15,10 +15,12 @@ const USER = [
   {
     id: 'klaus',
     name: 'van',
+    email: 'psb04027@naver.com',
   },
   {
     id: 'test',
     name: 'testman',
+    email: 'zxc123@daum.net',
   },
 ];
 app.set('view engine', 'ejs');
@@ -46,10 +48,11 @@ userRouter.get('/:id', (req, res) => {
 
 //회원 등록
 userRouter.post('/', (req, res) => {
-  if (req.query.id && req.query.name) {
+  if (req.query.id && req.query.name && req.query.email) {
     const newUser = {
       id: req.query.id,
       name: req.query.name,
+      email: req.query.email,
     };
     USER.push(newUser);
     res.send('회원 등록 완료');
@@ -60,18 +63,19 @@ userRouter.post('/', (req, res) => {
 
 //회원 수정
 userRouter.put('/:id', (req, res) => {
-  if (req.query.id && req.query.name) {
+  if (req.query.id && req.query.name && req.query.email) {
     const userData = USER.find((user) => user.id === req.params.id);
     if (userData) {
       const arrIndex = USER.findIndex((user) => user.id === req.params.id);
       const modifyUser = {
         id: req.query.id,
         name: req.query.name,
+        email: req.query.email,
       };
       USER[arrIndex] = modifyUser;
       res.send('회원 수정 완료');
     } else {
-      res.end('해당 ID를 사진 회원이 없습니다.');
+      res.end('해당 ID를 가진 회원이 없습니다.');
     }
   } else {
     res.end('부적절한 쿼리입니다.');
