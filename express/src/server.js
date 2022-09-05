@@ -24,7 +24,7 @@ app.use('/users', userRouter);
 app.use('/posts', postsRouter);
 
 userRouter.get('/', (req, res) => {
-  res.send('회원 목록');
+  res.send(USER);
 });
 
 //const userData = USER.find(function(user, index) -> index 값도 받아올 수 있음
@@ -37,8 +37,17 @@ userRouter.get('/:id', (req, res) => {
   }
 });
 
-userRouter.post('/:name', (req, res) => {
-  res.send(`이름이 ${req.params.name}인 유저가 등록되었습니다.`);
+userRouter.post('/', (req, res) => {
+  if (req.query.id && req.query.name) {
+    const newUser = {
+      id: req.query.id,
+      name: req.query.name,
+    };
+    USER.push(newUser);
+    res.send('회원 등록 완료');
+  } else {
+    res.end('잘못된 쿼리입니다.');
+  }
 });
 
 /* postsRouter.get('/', (req, res) => {
