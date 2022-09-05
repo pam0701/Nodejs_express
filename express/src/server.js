@@ -10,23 +10,44 @@ const PORT = 4000;
 const userRouter = express.Router();
 const postsRouter = express.Router();
 
+const USER = [
+  {
+    id: 'klaus',
+    name: 'van',
+  },
+  {
+    id: 'test',
+    name: 'testman',
+  },
+];
 app.use('/users', userRouter);
 app.use('/posts', postsRouter);
 
-userRouter.get('/:name', (req, res) => {
+userRouter.get('/', (req, res) => {
   res.send('회원 목록');
 });
-userRouter.post('/', (req, res) => {
+
+//const userData = USER.find(function(user, index) -> index 값도 받아올 수 있음
+userRouter.get('/:id', (req, res) => {
+  const userData = USER.find((user) => user.id === req.params.id);
+  if (userData) {
+    res.send(userData);
+  } else {
+    res.end('ID not found');
+  }
+});
+
+userRouter.post('/:name', (req, res) => {
   res.send(`이름이 ${req.params.name}인 유저가 등록되었습니다.`);
 });
 
-postsRouter.get('/:title', (req, res) => {
+/* postsRouter.get('/', (req, res) => {
   res.send('블로그 글 목록');
 });
 
-postsRouter.post('/', (req, res) => {
-  res.send(`제목이 ${req.params.title} 인 글이 등록 되었습니다.`);
-});
+postsRouter.post('/:title', (req, res) => {
+  res.send(`제목이 ${req.params.title}인 글이 등록되었습니다.`);
+}); */
 
 // app.get('/', (req, res) => {
 //   res.send('GET request');
