@@ -21,11 +21,16 @@ const USER = [
     name: 'testman',
   },
 ];
+app.set('view engine', 'ejs');
+app.set('views', 'views');
+
 app.use('/users', userRouter);
 app.use('/posts', postsRouter);
 
 userRouter.get('/', (req, res) => {
-  res.send(USER);
+  const userLen = USER.length;
+  res.render('index', { USER, userCounts: userLen });
+  /* res.send(USER); */
 });
 
 //회원 조회

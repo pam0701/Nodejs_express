@@ -4,5 +4,6 @@ module.exports = {
     'linebreak-style': 0,
     'no-console': 'off',
     'prefer-destructuring': 'off',
+    'no-plusplus': 'off',
   },
 };
