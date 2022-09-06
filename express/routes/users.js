@@ -21,7 +21,7 @@ const USER = [
 
 router.get('/', (req, res) => {
   const userLen = USER.length;
-  res.render('index', { USER, userCounts: userLen });
+  res.render('user', { USER, userCounts: userLen });
   /* res.send(USER); */
 });
 

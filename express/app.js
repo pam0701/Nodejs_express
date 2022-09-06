@@ -8,14 +8,13 @@ const app = express();
 const PORT = 4000;
 
 const userRouter = require('./routes/users');
-
-const postsRouter = express.Router();
+const postRouter = require('./routes/posts');
 
 app.set('view engine', 'ejs');
 app.set('views', 'views');
 
 app.use('/users', userRouter);
-app.use('/posts', postsRouter);
+app.use('/posts', postRouter);
 
 app.use(express.static('public'));
 
