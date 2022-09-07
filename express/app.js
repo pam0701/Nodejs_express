@@ -7,12 +7,15 @@ const app = express();
 
 const PORT = 4000;
 
+const router = require('./routes');
 const userRouter = require('./routes/users');
+
 const postRouter = require('./routes/posts');
 
 app.set('view engine', 'ejs');
 app.set('views', 'views');
 
+app.use('/', router);
 app.use('/users', userRouter);
 app.use('/posts', postRouter);
 

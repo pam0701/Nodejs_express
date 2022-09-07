@@ -19,6 +19,7 @@ const USER = [
   },
 ];
 
+// localhost:4000/users로 접속 시 수행
 router.get('/', (req, res) => {
   const userLen = USER.length;
   res.render('user', { USER, userCounts: userLen });
