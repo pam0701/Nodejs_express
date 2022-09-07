@@ -8,7 +8,7 @@ module.exports = router;
 
 const WORD = [
   {
-    title: 'Devops',
+    title: 'DevOps',
     content: 'Team Leader',
   },
   {
@@ -19,7 +19,7 @@ const WORD = [
 
 router.get('/', (req, res) => {
   const wordLen = WORD.length;
-  res.render('post', { WORD, wordCounts: wordLen });
+  res.render('post', { WORD, wordCounts: wordLen }); //post.ejs
   /* res.send(WORD); */
 });
 
@@ -30,7 +30,7 @@ router.get('/:title', (req, res) => {
   if (wordData) {
     res.send(wordData);
   } else {
-    const err = new Error('해당 제목을 가진 포스트가 없습니다.');
+    const err = new Error('해당 제목을 가진 글이 없습니다.');
     err.statusCode = 404;
     throw err;
   }
@@ -38,18 +38,36 @@ router.get('/:title', (req, res) => {
 
 //새로운 글 작성
 router.post('/', (req, res) => {
-  if (req.query.title && req.query.content) {
-    const newWord = {
-      title: req.query.title,
-      content: req.query.content,
-    };
-    WORD.push(newWord);
-    res.send('글 등록 완료');
+  if (Object.keys(req.query).length >= 1) {
+    if (req.query.title && req.query.content) {
+      const newWord = {
+        title: req.query.title,
+        content: req.query.content,
+      };
+      WORD.push(newWord);
+      res.redirect('/posts'); //posts.js
+    } else {
+      const err = new Error('Unexpected query');
+      err.statusCode = 404;
+      throw err;
+    }
+  } else if (req.body) {
+    if (req.body.title && req.body.content) {
+      const newWord = {
+        title: req.body.title,
+        content: req.body.content,
+      };
+      WORD.push(newWord);
+      res.redirect('/posts'); //posts.js
+    } else {
+      const err = new Error('Unexpected query');
+      err.statusCode = 404;
+      throw err;
+    }
   } else {
-    const err = new Error('해당 제목을 가진 글이 없습니다.');
+    const err = new Error('No data');
     err.statusCode = 404;
     throw err;
-    res.end('잘못된 쿼리입니다.');
   }
 });
 
@@ -88,6 +106,5 @@ router.delete('/:title', (req, res) => {
     const err = new Error('해당 제목을 가진 글이 없습니다.');
     err.statusCode = 404;
     throw err;
-    res.end('해당 제목을 가진 글이 없습니다.');
   }
 });

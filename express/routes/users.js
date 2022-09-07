@@ -41,19 +41,38 @@ router.get('/:id', (req, res) => {
 
 //회원 등록
 router.post('/', (req, res) => {
-  if (req.query.id && req.query.name && req.query.email) {
-    const newUser = {
-      id: req.query.id,
-      name: req.query.name,
-      email: req.query.email,
-    };
-    USER.push(newUser);
-    res.send('회원 등록 완료');
+  if (Object.keys(req.query).length >= 1) {
+    if (req.query.id && req.query.name && req.query.email) {
+      const newUser = {
+        id: req.query.id,
+        name: req.query.name,
+        email: req.query.email,
+      };
+      USER.push(newUser);
+      res.send('회원 등록 완료');
+    } else {
+      const err = new Error('Unexpected query');
+      err.statusCode = 404;
+      throw err;
+    }
+  } else if (req.body) {
+    if (req.body.id && req.body.name && req.body.email) {
+      const newUser = {
+        id: req.body.id,
+        name: req.body.name,
+        email: req.query.email,
+      };
+      USER.push(newUser);
+      res.redirect('/users');
+    } else {
+      const err = new Error('Unexpected query');
+      err.statusCode = 404;
+      throw err;
+    }
   } else {
-    const err = new Error('해당 아이디를 가진 회원이 없습니다.');
+    const err = new Error('No data');
     err.statusCode = 404;
     throw err;
-    res.end('잘못된 쿼리입니다.');
   }
 });
 
@@ -91,6 +110,5 @@ router.delete('/:id', (req, res) => {
     const err = new Error('해당 아이디를 가진 회원이 없습니다.');
     err.statusCode = 404;
     throw err;
-    res.end('해당 ID를 가진 회원이 없습니다.');
   }
 });

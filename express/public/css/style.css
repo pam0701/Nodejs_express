@@ -1,4 +1,30 @@
+@font-face {
+  font-family: 'LeferiPoint-WhiteObliqueA';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2201-2@1.0/LeferiPoint-WhiteObliqueA.woff')
+    format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
 body {
+  font-family: 'LeferiPoint-WhiteObliqueA';
   background-color: burlywood;
   color: black;
+  width: 100%;
+}
+
+div {
+  width: 400px;
+  margin: 0 auto;
+  text-align: center;
+}
+button {
+  font-family: 'LeferiPoint-WhiteObliqueA';
+  color: rgb(226, 73, 43);
+  background-color: rgb(212, 206, 116);
+  font-size: 20px;
+  font-weight: bold;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
 }

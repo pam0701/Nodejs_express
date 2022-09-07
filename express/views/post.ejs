@@ -11,24 +11,49 @@
 </head>
 
 <body>
-    <wrap>
-        <container>
-        <h1>글 목록</h1>
-        <h2>글 갯수 <%= wordCounts %></h2>
-        <ul>
-            <% if(wordCounts > 0) { %>
-            <% for(let i=0; i < wordCounts; i++) { %>
-            <li>
-            <p>TITLE: <%= WORD[i].title %></p>
-            <p>CONTENT: <%= WORD[i].content %></p>
-            </li>
-            <% } %> <% } else { %>
-            <li>글 정보가 없습니다!</li>
-            <% } %>
-        </ul>
-        <img src="./image/react-logo.png" alt="리액트 로고">
-    </container>
-</wrap>
+  <div>
+    <h1>글 목록</h1>
+    <h2>글 갯수 <%= wordCounts %></h2>
+    <ul>
+      <% if(wordCounts > 0) { %>
+      <% for(let i=0; i < wordCounts; i++) { %>
+      <li>
+        <p>TITLE: <%= WORD[i].title %></p>
+        <p>CONTENT: <%= WORD[i].content %></p>
+        <a href="#" onclick="deleteWord('<%= WORD[i].title %>');">삭제</a>
+      </li>
+      <% } %> <% } else { %>
+      <li>글 정보가 없습니다!</li>
+      <% } %>
+    </ul>
+  </div>
+  <div>
+    <h1>나만의 글쓰기</h1>
+  </div>
+  <div>
+    <form action="/posts" method="POST">
+      <!-- posts.js -->
+      글 제목 : <input type="text" name="title" /><br>
+      ===========================================<br />
+      <textarea rows="10" cols="50" name="content"></textarea>
+      <div>
+        <button type="submit">게시하기</button>
+      </div>
+    </form>
+  </div>
 </body>
+<script>
+  function deleteWord(title) {
+    fetch(`http://localhost:4000/posts/${title}`, {
+      method: 'delete',
+      headers: {
+        'Content-type': 'application/json'
+      },
+    }).then((res) => {
+      console.log(res);
+      location.reload();
+    })
+  }
+</script>
 
 </html>

@@ -1,15 +1,18 @@
 // @ts-check
 
 const express = require('express');
+/* const bodyParser = require('body-parser'); */
+
 // const fs = require('fs');
 
 const app = express();
 
 const PORT = 4000;
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
 
 const router = require('./routes');
 const userRouter = require('./routes/users');
-
 const postRouter = require('./routes/posts');
 
 app.set('view engine', 'ejs');
