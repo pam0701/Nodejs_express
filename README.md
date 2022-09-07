@@ -1,6 +1,8 @@
 # Nodejs_express
 
-### postman을 이용하여 url 변경해주세요
+### postman을 이용하여 url 변경해가면서 테스트 할 수 있습니다.
+
+#### https://www.postman.com/
 
 ## `기능 설명`
 
@@ -49,5 +51,3 @@
 ### • 특정 title을 가진 글 삭제
 
 #### DELETE localhost:4000/posts/:title
-
----
