@@ -1,8 +1,8 @@
 # Nodejs_express
 
-## `기능 설명`
-
 ### postman을 이용하여 url 변경해주세요
+
+## `기능 설명`
 
 ---
 
@@ -42,12 +42,12 @@
 
 #### POST localhost:4000/posts?title=title&content=content
 
-### • 특정 title 을 가진 글 수정
+### • 특정 title을 가진 글 수정
 
 #### PUT localhost:4000/posts/:title?title=title&content=content
 
-## • 특정 title 을 가진 글 삭제
+### • 특정 title을 가진 글 삭제
 
-### DELETE localhost:4000/posts/:title
+#### DELETE localhost:4000/posts/:title
 
 ---
