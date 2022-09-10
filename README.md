@@ -51,3 +51,11 @@
 ### • 특정 title을 가진 글 삭제
 
 #### DELETE localhost:4000/posts/:title
+
+---
+
+## `기능(mongoDB 이용)`
+
+### localhost:4000/board - 게시글 목록 보기
+
+#### 각 게시글마다 수정, 삭제 가능
