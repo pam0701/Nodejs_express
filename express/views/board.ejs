@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BOARD Page</title>
+</head>
+
+<body>
+
+  <h1>글 목록</h1>
+  <h2>포스트 수 <%= boardCounts %></h2>
+  <ul>
+    <% if(boardCounts> 0) { %>
+    <% for(let i=0; i < boardCounts; i++) { %>
+    <li>
+      <p>title: <%= BOARD[i].title %></p>
+      <p>content: <%= BOARD[i].content %></p>
+      <a href="#" onclick="deleteBoard(`<%= BOARD[i].title %>`);">삭제하기</a>
+      <a href="board/board_modify" onclick="modifyBoard(`<%= BOARD[i].title %>`);">수정하기</a>
+
+    </li>
+    <% } %> <% } else { %>
+    <li>게시판 글이 없습니다!</li>
+    <% } %>
+  </ul>
+</body>
+<script>
+  function deleteBoard(title) {
+    fetch(`http://localhost:4000/board/${title}`, {
+      method: 'delete',
+      headers: {
+        'Content-type': 'application/json'
+      }
+    }).then((res) => {
+      console.log(res);
+      location.reload();
+    })
+  }
+
+  function modifyBoard(title) {}
+</script>
+
+</html>

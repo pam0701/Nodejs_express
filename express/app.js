@@ -14,6 +14,7 @@ app.use(express.urlencoded({ extended: false }));
 const router = require('./routes');
 const userRouter = require('./routes/users');
 const postRouter = require('./routes/posts');
+const boardRouter = require('./routes/board');
 
 app.set('view engine', 'ejs');
 app.set('views', 'views');
@@ -21,6 +22,7 @@ app.set('views', 'views');
 app.use('/', router);
 app.use('/users', userRouter);
 app.use('/posts', postRouter);
+app.use('/board', boardRouter);
 
 app.use(express.static('public'));
 
