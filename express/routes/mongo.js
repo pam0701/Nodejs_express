@@ -1,72 +1,38 @@
 // @ts-check
+const dotenv = require('dotenv');
+const path = require('path');
+
+dotenv.config({ path: 'config.env' });
 
 const { MongoClient, ServerApiVersion } = require('mongodb');
 
-const uri =
-  'mongodb+srv://klaus:zxc0987@cluster0.rjygz5y.mongodb.net/?retryWrites=true&w=majority';
-const client = new MongoClient(uri, {
+const client = new MongoClient(process.env.MONGO_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
   serverApi: ServerApiVersion.v1,
 });
-async function main() {
-  await client.connect();
 
-  const users = client.db('people').collection('users');
+module.exports = client;
 
-  await users.deleteMany({});
-  await users.insertMany([
-    {
-      name: 'pororo',
-      age: 5,
-    },
-    {
-      name: 'loopy',
-      age: 6,
-    },
-    {
-      name: 'crong',
-      age: 4,
-    },
-  ]);
+// async function main() {
+//   await client.connect();
 
-  /* // 객체 하나 삽입
-  await users.insertOne({
-    name: 'pororo',
-    age: 5,
-    }); */
+//   const users = client.db('kdt1').collection('board');
 
-  /*   //객체 여러개 삭제
-  await users.deleteMany({
-    age: { $gte: 5 },
-    }); */
+//   await users.deleteMany({});
 
-  /*
-  //객체 하나만 삭제 
-   users.deleteOne({
-    name: 'crong',
-  }); */
+//   await users.insertMany([
+//     {
+//       title: 'test1',
+//       content: 'test1',
+//     },
+//     {
+//       title: 'test2',
+//       content: 'test2',
+//     },
+//   ]);
 
-  await users.updateMany(
-    {
-      age: { $gte: 5 },
-    },
-    {
-      $set: {
-        old: 'yes',
-      },
-    }
-  );
+//   await client.close();
+// }
 
-  const data = await users.find({
-    name: 'loopy',
-  });
-  /*   const data = users.find({}); //mongoDB의 POINT! -> 모든 데이터를 쓰지 않을 수도 있기때문에 const data = user.find({});으로 데이터가 찾아질 때 데이터를 불러옴
-  const arr = await data.toArray(); */
-  console.log(data);
-  const arr = await data.toArray();
-  console.log(arr);
-
-  await client.close();
-}
-main();
+// main();

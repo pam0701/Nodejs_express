@@ -7,7 +7,7 @@ const router = express.Router();
 
 router.get('/', async (req, res) => {
   const client = await mongoClient.connect();
-  const cursor = client.db('Board').collection('post');
+  const cursor = client.db('kdt1').collection('board');
   const ARTICLE = await cursor.find({}).toArray();
 
   const articleLen = ARTICLE.length;
@@ -23,7 +23,7 @@ router.post('/', async (req, res) => {
       };
 
       const client = await mongoClient.connect();
-      const cursor = client.db('Board').collection('post');
+      const cursor = client.db('kdt1').collection('board');
       await cursor.insertOne(newArticle);
       res.redirect('/board');
     } else {
@@ -42,7 +42,7 @@ router.post('/title/:title', async (req, res) => {
   if (req.body) {
     if (req.body.title && req.body.content) {
       const client = await mongoClient.connect();
-      const cursor = client.db('Board').collection('post');
+      const cursor = client.db('kdt1').collection('board');
       await cursor.updateOne(
         { title: req.params.title },
         { $set: { title: req.body.title, content: req.body.content } }
@@ -62,7 +62,7 @@ router.post('/title/:title', async (req, res) => {
 
 router.delete('/title/:title', async (req, res) => {
   const client = await mongoClient.connect();
-  const cursor = client.db('Board').collection('post');
+  const cursor = client.db('kdt1').collection('board');
   const result = await cursor.deleteOne({ title: req.params.title });
 
   if (result.acknowledged) {
@@ -72,19 +72,17 @@ router.delete('/title/:title', async (req, res) => {
   }
 });
 
-//글쓰기 모드로 이동
 router.get('/write', (req, res) => {
   res.render('board_write');
 });
 
 router.get('/modify/:title', async (req, res) => {
-  const client = await mongoClient.connect();
-  const cursor = client.db('Board').collection('post');
-  const ARTICLE = await cursor.find({}).toArray();
+  const ARTICLE = await getArticle();
   const arrIndex = ARTICLE.findIndex(
     (_article) => _article.title === req.params.title
   );
   const selectedArticle = ARTICLE[arrIndex];
+  await saveArticle(ARTICLE);
   res.render('board_modify', { selectedArticle });
 });
 
