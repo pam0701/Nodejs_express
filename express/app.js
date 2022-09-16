@@ -2,7 +2,7 @@
 
 const express = require('express');
 /* const bodyParser = require('body-parser'); */
-
+const cookieParser = require('cookie-parser');
 // const fs = require('fs');
 
 const app = express();
@@ -10,6 +10,7 @@ const PORT = 4000;
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+app.use(cookieParser());
 
 const router = require('./routes');
 const userRouter = require('./routes/users');
