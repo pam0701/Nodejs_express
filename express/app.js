@@ -3,7 +3,7 @@
 const express = require('express');
 /* const bodyParser = require('body-parser'); */
 const cookieParser = require('cookie-parser');
-// const fs = require('fs');
+const session = require('express-session');
 
 const app = express();
 const PORT = 4000;
@@ -11,6 +11,16 @@ const PORT = 4000;
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use(
+  session({
+    secret: 'klaus',
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+      maxAge: 1000 * 60 * 60,
+    },
+  })
+);
 
 const router = require('./routes');
 const userRouter = require('./routes/users');

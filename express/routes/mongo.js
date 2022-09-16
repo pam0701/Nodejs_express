@@ -17,7 +17,7 @@ module.exports = client;
 // async function main() {
 //   await client.connect();
 
-//   const users = client.db('kdt1').collection('board');
+//   const users = client.db('Board').collection('post');
 
 //   await users.deleteMany({});
 

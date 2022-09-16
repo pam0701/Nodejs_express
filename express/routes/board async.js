@@ -22,14 +22,14 @@ const router = express.Router();
 
 async function getArticle() {
   const client = await mongoClient.connect();
-  const db = client.db('kdt1').collection('board');
+  const db = client.db('Board').collection('post');
   const data = await db.find({}).toArray();
   return data;
 }
 
 async function saveArticle(modifiedArticle) {
   const client = await mongoClient.connect();
-  const db = client.db('kdt1').collection('board');
+  const db = client.db('Board').collection('post');
   await db.deleteMany({});
   if (Object.keys(modifiedArticle).length !== 0) {
     await db.insertMany(modifiedArticle);
