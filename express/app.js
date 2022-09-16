@@ -16,6 +16,8 @@ const router = require('./routes');
 const userRouter = require('./routes/users');
 const postRouter = require('./routes/posts');
 const boardRouter = require('./routes/board');
+const registerRouter = require('./routes/register');
+const loginRouter = require('./routes/login');
 
 app.set('view engine', 'ejs');
 app.set('views', 'views');
@@ -24,6 +26,8 @@ app.use('/', router);
 app.use('/users', userRouter);
 app.use('/posts', postRouter);
 app.use('/board', boardRouter);
+app.use('/register', registerRouter);
+app.use('/login', loginRouter);
 
 app.use(express.static('public'));
 
