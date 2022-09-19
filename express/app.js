@@ -1,6 +1,6 @@
 // @ts-check
 const express = require('express');
-
+const dotenv = require('dotenv');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
@@ -10,7 +10,7 @@ const LocalStrategy = require('passport-local').Strategy;
 const mongoClient = require('./routes/mongo');
 
 const app = express();
-const PORT = 4000;
+const PORT = process.env.PORT;
 
 // 바디파서
 app.use(bodyParser.json());
