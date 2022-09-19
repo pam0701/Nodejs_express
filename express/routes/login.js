@@ -1,36 +1,33 @@
 // @ts-check
 const express = require('express');
-require('dotenv').config();
-const router = express.Router();
-
 const passport = require('passport');
 
-const mongoClient = require('./mongo');
+const router = express.Router();
 
-//로그인 함수화
 const isLogin = (req, res, next) => {
   if (req.session.login || req.user || req.signedCookies.user) {
     next();
   } else {
-    res.status(300);
-    res.send('로그인 해주세요.<br><a href="/login">로그인 페이지로 이동</a>');
+    res.send(
+      '로그인 해주세요.<br><a href="/login">로그인 페이지로 이동</a><br><a href="/">메인 페이지로 이동</a>'
+    );
   }
 };
 
-router.get('/', (req, res) => {
+router.get('/', async (req, res) => {
   res.render('login');
 });
 
-router.post('/', async (req, res, next) => {
+router.post('/', (req, res, next) => {
   passport.authenticate('local', (err, user, info) => {
-    if (err) throw err;
+    if (err) next(err);
     if (!user) {
       return res.send(
         `${info.message}<br><a href="/login">로그인 페이지로 이동</a>`
       );
     }
     req.logIn(user, (err) => {
-      if (err) throw err;
+      if (err) next(err);
       res.cookie('user', req.body.id, {
         expires: new Date(Date.now() + 1000 * 60),
         httpOnly: true,
@@ -42,10 +39,35 @@ router.post('/', async (req, res, next) => {
 });
 
 router.get('/logout', (req, res, next) => {
-  req.logOut((err) => {
-    if (err) return next(err);
+  req.logout((err) => {
+    if (err) {
+      return next(err);
+    }
     return res.redirect('/');
   });
 });
+
+router.get(
+  '/auth/facebook',
+  passport.authenticate('facebook', { scope: 'email' })
+);
+
+router.get(
+  '/auth/facebook/callback',
+  passport.authenticate('facebook', {
+    successRedirect: '/board',
+    failureRedirect: '/',
+  })
+);
+
+router.get('/auth/naver', passport.authenticate('naver'));
+
+router.get(
+  '/auth/naver/callback',
+  passport.authenticate('naver', {
+    successRedirect: '/board',
+    failureRedirect: '/',
+  })
+);
 
 module.exports = { router, isLogin };
