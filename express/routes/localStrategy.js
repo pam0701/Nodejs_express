@@ -12,7 +12,7 @@ module.exports = () => {
       },
       async (id, password, cb) => {
         const client = await mongoClient.connect();
-        const userCursor = client.db('kdt1').collection('users');
+        const userCursor = client.db('people').collection('users');
         const idResult = await userCursor.findOne({ id });
         if (idResult !== null) {
           const result = await userCursor.findOne({
@@ -37,7 +37,7 @@ module.exports = () => {
 
   passport.deserializeUser(async (id, cb) => {
     const client = await mongoClient.connect();
-    const userCursor = client.db('kdt1').collection('users');
+    const userCursor = client.db('people').collection('users');
     const result = await userCursor.findOne({ id });
     if (result) cb(null, result);
   });

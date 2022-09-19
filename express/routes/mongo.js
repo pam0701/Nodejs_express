@@ -1,7 +1,6 @@
 // @ts-check
 const dotenv = require('dotenv');
 const path = require('path');
-
 dotenv.config({ path: 'config.env' });
 
 const { MongoClient, ServerApiVersion } = require('mongodb');
