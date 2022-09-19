@@ -1,7 +1,6 @@
 // @ts-check
 const express = require('express');
-const dotenv = require('dotenv');
-dotenv.config({ path: 'config.env' });
+require('dotenv').config();
 
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
