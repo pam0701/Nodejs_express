@@ -1,14 +1,17 @@
 // @ts-check
 const express = require('express');
+const { runInNewContext } = require('vm');
 
 const mongoClient = require('./mongo');
 
 const router = express.Router();
 
+//로그인 함수화
 function isLogin(req, res, next) {
-  if (req.session.login || req.user) {
+  if (req.session.login || req.user || req.signedCookies.user) {
     next();
   } else {
+    res.status(300);
     res.send('로그인 해주세요.<br><a href="/login">로그인 페이지로 이동</a>');
   }
 }

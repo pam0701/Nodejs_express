@@ -16,7 +16,8 @@ const PORT = 4000;
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 // 쿠키파서
-app.use(cookieParser());
+app.use(cookieParser('klaus'));
+
 // 세션
 app.use(
   session({
@@ -70,6 +71,8 @@ const router = require('./routes/index');
 const boardRouter = require('./routes/board');
 const registerRouter = require('./routes/register');
 const loginRouter = require('./routes/login');
+const localStrategy = require('./routes/localStrategy');
+localStrategy();
 
 app.set('view engine', 'ejs');
 app.set('views', 'views');

@@ -25,7 +25,7 @@ module.exports = () => {
             cb(null, false, { message: '비밀번호가 다릅니다.' });
           }
         } else {
-          cb(null, false, { message: '해당 id 가 없습니다.' });
+          cb(null, false, { message: '해당 id가 없습니다.' });
         }
       }
     )

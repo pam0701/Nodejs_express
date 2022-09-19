@@ -21,6 +21,11 @@ router.post('/', async (req, res, next) => {
     }
     req.logIn(user, (err) => {
       if (err) throw err;
+      res.cookie('user', req.body.id, {
+        expires: new Date(Date.now() + 1000 * 60),
+        httpOnly: true,
+        signed: true,
+      });
       res.redirect('/board');
     });
   })(req, res, next);
