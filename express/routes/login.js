@@ -7,6 +7,16 @@ const passport = require('passport');
 
 const mongoClient = require('./mongo');
 
+//로그인 함수화
+const isLogin = (req, res, next) => {
+  if (req.session.login || req.user || req.signedCookies.user) {
+    next();
+  } else {
+    res.status(300);
+    res.send('로그인 해주세요.<br><a href="/login">로그인 페이지로 이동</a>');
+  }
+};
+
 router.get('/', (req, res) => {
   res.render('login');
 });
@@ -38,4 +48,4 @@ router.get('/logout', (req, res, next) => {
   });
 });
 
-module.exports = router;
+module.exports = { router, isLogin };

@@ -81,7 +81,7 @@ app.use(express.static('public'));
 app.use('/', router);
 app.use('/board', boardRouter);
 app.use('/register', registerRouter);
-app.use('/login', loginRouter);
+app.use('/login', loginRouter.router);
 
 app.use((err, req, res, next) => {
   console.log(err.stack);
