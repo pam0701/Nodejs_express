@@ -4,9 +4,8 @@ const path = require('path');
 dotenv.config({ path: 'config.env' });
 
 const { MongoClient, ServerApiVersion } = require('mongodb');
-const uri =
-  'mongodb+srv://klaus:123@cluster0.rjygz5y.mongodb.net/?retryWrites=true&w=majority';
-const client = new MongoClient(uri, {
+
+const client = new MongoClient(process.env.MONGO_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
   serverApi: ServerApiVersion.v1,
