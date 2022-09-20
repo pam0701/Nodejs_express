@@ -59,3 +59,9 @@
 ### localhost:4000/board - 게시글 목록 보기
 
 #### 각 게시글마다 수정, 삭제 가능
+
+## `Server`
+
+### AWS Server
+
+### public ip 주소로 접근
