@@ -1,10 +1,28 @@
 // @ts-check
 const express = require('express');
-const mongoClient = require('./mongo');
-const login = require('./login');
-require('dotenv').config();
+const multer = require('multer');
+const fs = require('fs');
 
 const router = express.Router();
+
+const mongoClient = require('./mongo');
+const login = require('./login');
+
+/* ---------- Start image upload module ---------- */
+const dir = './uploads';
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, dir);
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.fieldname + '_' + Date.now());
+  },
+});
+const limits = {
+  fileSize: 1024 * 1028 * 2,
+};
+const upload = multer({ storage, limits });
+/* ---------- End image upload module ---------- */
 
 router.get('/', login.isLogin, async (req, res) => {
   const client = await mongoClient.connect();
@@ -27,13 +45,21 @@ router.get('/write', login.isLogin, (req, res) => {
   res.render('board_write');
 });
 
-router.post('/', login.isLogin, async (req, res) => {
+router.post('/', login.isLogin, upload.single('img'), async (req, res) => {
+  if (!fs.existsSync(dir)) fs.mkdirSync(dir);
+
   if (req.body) {
     if (req.body.title && req.body.content) {
       const newArticle = {
-        id: req.session.userId ? req.session.userId : req.user.id,
+        id: req.session.userId
+          ? req.session.userId
+          : req.user.id
+          ? req.user.id
+          : req.signedCookies.user,
+        userName: req.user?.name ? req.user.name : req.user?.id,
         title: req.body.title,
         content: req.body.content,
+        img: req.file ? req.file.filename : null,
       };
 
       const client = await mongoClient.connect();

@@ -138,6 +138,11 @@
             <div class="content">
               <%= ARTICLE[i].content %>
             </div>
+            <div class="img">
+              <% if (ARTICLE[i].img !=null) { %>
+                <img src="uploads/<%= ARTICLE[i].img %>" width="500">
+                <% } %>
+            </div>
             <div class="foot">
               <% if (ARTICLE[i].id === userId) { %>
               <a class="btn orange" href="board/modify/<%= ARTICLE[i].title %>">수정</a>

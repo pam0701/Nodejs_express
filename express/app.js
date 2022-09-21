@@ -42,6 +42,8 @@ app.use('/board', boardRouter);
 app.use('/register', registerRouter);
 app.use('/login', loginRouter.router);
 app.use(express.static('public'));
+app.use('/uploads', express.static('uploads'));
+
 // 이것이 모든 모듈의 에러를 처리함
 app.use((err, req, res, next) => {
   console.log(err.stack);
