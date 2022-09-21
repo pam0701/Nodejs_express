@@ -7,6 +7,8 @@ const NaverStrategy = require('passport-naver').Strategy;
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const KakaoStrategy = require('passport-kakao').Strategy;
 
+const verifyModule = require('./register').verifyPassword;
+
 const mongoClient = require('./mongo');
 
 module.exports = () => {
@@ -19,10 +21,21 @@ module.exports = () => {
       async (id, password, cb) => {
         const client = await mongoClient.connect();
         const userCursor = client.db('people').collection('users');
-        const result = await userCursor.findOne({ id });
-        if (result !== null) {
-          if (result.password === password) {
-            cb(null, result);
+        const idResult = await userCursor.findOne({ id });
+        if (idResult !== null) {
+          if (idResult.salt !== undefined) {
+            const passwordResult = verifyModule(
+              password,
+              idResult.salt,
+              idResult.password
+            );
+            if (passwordResult) {
+              cb(null, idResult);
+            } else {
+              cb(null, false, { message: '비밀번호가 다릅니다.' });
+            }
+          } else if (idResult.password === password) {
+            cb(null, idResult);
           } else {
             cb(null, false, { message: '비밀번호가 다릅니다.' });
           }

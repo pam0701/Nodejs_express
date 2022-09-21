@@ -39,7 +39,7 @@ app.set('views', 'views'); // views라는 폴더에서 ejs파일을 찾는다는
 app.use(express.static('public'));
 app.use('/', router);
 app.use('/board', boardRouter);
-app.use('/register', registerRouter);
+app.use('/register', registerRouter.router);
 app.use('/login', loginRouter.router);
 app.use(express.static('public'));
 app.use('/uploads', express.static('uploads'));
