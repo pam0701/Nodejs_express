@@ -5,6 +5,7 @@ const LocalStrategy = require('passport-local').Strategy;
 const FacebookStrategy = require('passport-facebook').Strategy;
 const NaverStrategy = require('passport-naver').Strategy;
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
+const KakaoStrategy = require('passport-kakao').Strategy;
 
 const mongoClient = require('./mongo');
 
@@ -108,6 +109,7 @@ module.exports = () => {
         callbackURL: process.env.GOOGLE_CB_URL,
       },
       async (accessToken, refreshToken, profile, cb) => {
+        console.log(profile.displayName);
         const client = await mongoClient.connect();
         const userCursor = client.db('people').collection('users');
         const result = await userCursor.findOne({ id: profile.id });
@@ -134,6 +136,43 @@ module.exports = () => {
     )
   );
   /* ---------- End google 로그인 전략 ---------- */
+
+  /* ---------- Start kakao 로그인 전략 ---------- */
+  passport.use(
+    new KakaoStrategy(
+      {
+        clientID: process.env.KAKAO_CLIENT,
+        clientSecret: process.env.KAKAO_CLIENT_SECRET,
+        callbackURL: process.env.KAKAO_CB_URL,
+      },
+      async (accessToken, refreshToken, profile, cb) => {
+        console.log(profile.displayName);
+        const client = await mongoClient.connect();
+        const userCursor = client.db('people').collection('users');
+        const result = await userCursor.findOne({ id: profile.id });
+        if (result !== null) {
+          cb(null, result);
+        } else {
+          console.log(profile.displayName);
+          const newUser = {
+            id: profile.id,
+            name:
+              profile.displayName !== undefined
+                ? profile.displayName
+                : profile.emails[0]?.value,
+            provider: profile.provider,
+          };
+          const dbResult = await userCursor.insertOne(newUser);
+          if (dbResult.acknowledged) {
+            cb(null, newUser);
+          } else {
+            cb(null, false, { message: '카카오 회원 생성 에러' });
+          }
+        }
+      }
+    )
+  );
+  /* ---------- End kakao 로그인 전략 ---------- */
 
   passport.serializeUser((user, cb) => {
     cb(null, user.id);

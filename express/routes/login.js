@@ -83,4 +83,16 @@ router.get(
 );
 /* ---------- End Google login ---------- */
 
+/* ---------- Start Kakao login ---------- */
+router.get('/auth/kakao', passport.authenticate('kakao'));
+
+router.get(
+  '/auth/kakao/callback',
+  passport.authenticate('kakao', {
+    successRedirect: '/board',
+    failureRedirect: '/',
+  })
+);
+/* ---------- End Kakao login ---------- */
+
 module.exports = { router, isLogin };
