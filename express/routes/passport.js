@@ -1,7 +1,10 @@
+//로그인 관련된 전략을 나타내는 passport.js
+
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const FacebookStrategy = require('passport-facebook').Strategy;
 const NaverStrategy = require('passport-naver').Strategy;
+const GoogleStrategy = require('passport-google-oauth20').Strategy;
 
 const mongoClient = require('./mongo');
 
@@ -28,7 +31,7 @@ module.exports = () => {
       }
     )
   );
-
+  /* ---------- Start facebook 로그인 전략 ---------- */
   passport.use(
     new FacebookStrategy(
       {
@@ -43,22 +46,24 @@ module.exports = () => {
         if (result !== null) {
           cb(null, result);
         } else {
-          const newFBUser = {
+          const newUser = {
             id: profile.id,
             name: profile.displayName,
             provider: profile.provider,
           };
-          const dbResult = await userCursor.insertOne(newFBUser);
+          const dbResult = await userCursor.insertOne(newUser);
           if (dbResult.acknowledged) {
-            cb(null, newFBUser);
+            cb(null, newUser);
           } else {
-            cb(null, false, { message: '페북 회원 생성 에러' });
+            cb(null, false, { message: '페이스북 회원 생성 에러' });
           }
         }
       }
     )
   );
+  /* ---------- End facebook 로그인 전략 ---------- */
 
+  /* ---------- Start naver 로그인 전략 ---------- */
   passport.use(
     new NaverStrategy(
       {
@@ -74,7 +79,7 @@ module.exports = () => {
           cb(null, result);
         } else {
           console.log(profile.displayName);
-          const newNaverUser = {
+          const newUser = {
             id: profile.id,
             name:
               profile.displayName !== undefined
@@ -82,9 +87,9 @@ module.exports = () => {
                 : profile.emails[0]?.value,
             provider: profile.provider,
           };
-          const dbResult = await userCursor.insertOne(newNaverUser);
+          const dbResult = await userCursor.insertOne(newUser);
           if (dbResult.acknowledged) {
-            cb(null, newNaverUser);
+            cb(null, newUser);
           } else {
             cb(null, false, { message: '네이버 회원 생성 에러' });
           }
@@ -92,6 +97,43 @@ module.exports = () => {
       }
     )
   );
+  /* ---------- End naver 로그인 전략 ---------- */
+
+  /* ---------- Start google 로그인 전략 ---------- */
+  passport.use(
+    new GoogleStrategy(
+      {
+        clientID: process.env.GOOGLE_CLIENT,
+        clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+        callbackURL: process.env.GOOGLE_CB_URL,
+      },
+      async (accessToken, refreshToken, profile, cb) => {
+        const client = await mongoClient.connect();
+        const userCursor = client.db('people').collection('users');
+        const result = await userCursor.findOne({ id: profile.id });
+        if (result !== null) {
+          cb(null, result);
+        } else {
+          console.log(profile.displayName);
+          const newUser = {
+            id: profile.id,
+            name:
+              profile.displayName !== undefined
+                ? profile.displayName
+                : profile.emails[0]?.value,
+            provider: profile.provider,
+          };
+          const dbResult = await userCursor.insertOne(newUser);
+          if (dbResult.acknowledged) {
+            cb(null, newUser);
+          } else {
+            cb(null, false, { message: '구글 회원 생성 에러' });
+          }
+        }
+      }
+    )
+  );
+  /* ---------- End google 로그인 전략 ---------- */
 
   passport.serializeUser((user, cb) => {
     cb(null, user.id);

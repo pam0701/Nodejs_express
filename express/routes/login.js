@@ -60,6 +60,7 @@ router.get(
   })
 );
 
+/* ---------- Start Naver login ---------- */
 router.get('/auth/naver', passport.authenticate('naver'));
 
 router.get(
@@ -69,5 +70,17 @@ router.get(
     failureRedirect: '/',
   })
 );
+/* ---------- End Naver login ---------- */
+
+/* ---------- Start Google login ---------- */
+router.get('/auth/google', passport.authenticate('google', { scope: 'email' }));
+router.get(
+  '/auth/google/callback',
+  passport.authenticate('google', {
+    successRedirect: '/board',
+    failureRedirect: '/',
+  })
+);
+/* ---------- End Google login ---------- */
 
 module.exports = { router, isLogin };
